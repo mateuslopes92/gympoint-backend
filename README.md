@@ -1,4 +1,4 @@
-# GYMPOINT
+# GYMPOINT (App to get certificate)
 The second challenge of GoStack Bootcamp, GymPoint project for Gyms developed backend with NodeJS, Express, Sequelize and Postgres database.
 
 Backendo of a gym app, developed to apply the knowledge adquired in Go Stack Bootcamp.
