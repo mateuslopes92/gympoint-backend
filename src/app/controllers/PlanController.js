@@ -25,6 +25,61 @@ class PlanController {
 
     return res.json(plan);
   }
+
+  async index(req, res) {
+    const plans = await Plan.findAll({
+      attributes: ['id', 'title', 'duration', 'price'],
+      order: ['id'],
+    });
+
+    return res.json(plans);
+  }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string(),
+      duration: Yup.number().integer(),
+      price: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
+    const { plan_id } = req.params;
+
+    const plan = await Plan.findByPk(plan_id);
+
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found' });
+    }
+
+    if (plan.title === req.body.title) {
+      return res
+        .status(400)
+        .json({ error: 'Plan with this title already exists' });
+    }
+
+    const { title, duration, price } = await plan.update(req.body);
+
+    return res.json({
+      title,
+      duration,
+      price,
+    });
+  }
+
+  async delete(req, res) {
+    const plan = await Plan.findByPk(req.params.plan_id);
+
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found' });
+    }
+
+    await plan.destroy();
+
+    return res.status(200).json({ ok: 'The plan has been deleted' });
+  }
 }
 
 export default new PlanController();

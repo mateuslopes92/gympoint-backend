@@ -3,6 +3,12 @@ import * as Yup from 'yup';
 import Student from '../models/Student';
 
 class StudentController {
+  async index(req, res) {
+    const students = await Student.findAll();
+
+    return res.json(students);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -51,13 +57,20 @@ class StudentController {
       return res.status(400).json({ error: 'Validation fails' });
     }
     const { email } = req.body;
-    const userId = req.params;
-    console.log(userId);
-    const student = await Student.findByPk(parseFloat(userId));
-    if (email !== student.email) {
+
+    const { student_id } = req.params;
+
+    const student = await Student.findByPk(student_id);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found' });
+    }
+
+    if (email && email !== student.email) {
       const studentExists = await Student.findOne({
         where: { email },
       });
+
       if (studentExists) {
         return res.status(400).json({ error: 'Student already exists' });
       }
@@ -65,7 +78,7 @@ class StudentController {
     const { name, age, wheight, height } = await student.update(req.body);
     return res.json({
       name,
-      email,
+      email: student.email,
       age,
       wheight,
       height,
