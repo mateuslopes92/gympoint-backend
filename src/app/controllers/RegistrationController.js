@@ -1,4 +1,4 @@
-import { addMonths, parseISO, startOfDay, endOfDay } from 'date-fns';
+import { addMonths, parseISO, startOfDay, isBefore, endOfDay } from 'date-fns';
 import Plan from '../models/Plan';
 import Registration from '../models/Registration';
 import Student from '../models/Student';
@@ -25,11 +25,13 @@ class RegistrationController {
 
     const { duration, price } = plan;
 
-    const startDate = endOfDay(parseISO(start_date));
+    const startDate = startOfDay(parseISO(start_date));
 
-    const endDate = endOfDay(addMonths(startDate, duration));
+    if (isBefore(endOfDay(startDate), new Date())) {
+      return res.status(400).json({ error: 'Past dates are not permited.' });
+    }
 
-    console.log(student_id, plan_id);
+    const endDate = startOfDay(addMonths(startDate, duration));
 
     const registration = await Registration.create({
       student_id,
