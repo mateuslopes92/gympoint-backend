@@ -1,4 +1,5 @@
 import { addMonths, parseISO, startOfDay, isBefore, endOfDay } from 'date-fns';
+import * as Yup from 'yup';
 import Plan from '../models/Plan';
 import Registration from '../models/Registration';
 import Student from '../models/Student';
@@ -11,6 +12,16 @@ class RegistrationController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number().required(),
+      plan_id: Yup.number().required(),
+      start_date: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails.' });
+    }
+
     const { student_id, plan_id, start_date } = req.body;
 
     const student = await Student.findOne({
@@ -51,6 +62,16 @@ class RegistrationController {
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({
+      student_id: Yup.number(),
+      plan_id: Yup.number(),
+      start_date: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails.' });
+    }
+
     const { registration_id } = req.params;
     const { student_id, plan_id, start_date } = req.body;
 
