@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
@@ -12,6 +13,14 @@ class AdmHelpOrderController {
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({
+      answer: Yup.string(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
     const { help_order_id } = req.params;
     const { answer } = req.body;
 

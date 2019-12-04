@@ -53,9 +53,11 @@ class StudentController {
       wheight: Yup.number().positive(),
       height: Yup.number().positive(),
     });
+
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
+
     const { email } = req.body;
 
     const { student_id } = req.params;

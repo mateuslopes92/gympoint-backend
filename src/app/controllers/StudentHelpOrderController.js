@@ -1,8 +1,25 @@
+import * as Yup from 'yup';
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
 class StudentHelpOrderController {
+  async index(req, res) {
+    const { student_id } = req.params;
+
+    const help_orders = await HelpOrder.findAll({ where: { student_id } });
+
+    return res.json(help_orders);
+  }
+
   async store(req, res) {
+    const schema = Yup.object().shape({
+      question: Yup.string().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
+
     const { student_id } = req.params;
     const { question } = req.body;
 
@@ -15,14 +32,6 @@ class StudentHelpOrderController {
     const { id, created_at } = await HelpOrder.create({ student_id, question });
 
     return res.json({ id, student_id, question, created_at });
-  }
-
-  async index(req, res) {
-    const { student_id } = req.params;
-
-    const help_orders = await HelpOrder.findAll({ where: { student_id } });
-
-    return res.json(help_orders);
   }
 }
 
