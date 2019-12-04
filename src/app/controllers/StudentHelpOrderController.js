@@ -16,6 +16,14 @@ class StudentHelpOrderController {
 
     return res.json({ id, student_id, question, created_at });
   }
+
+  async index(req, res) {
+    const { student_id } = req.params;
+
+    const help_orders = await HelpOrder.findAll({ where: { student_id } });
+
+    return res.json(help_orders);
+  }
 }
 
 export default new StudentHelpOrderController();

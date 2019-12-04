@@ -1,11 +1,42 @@
 import HelpOrder from '../models/HelpOrder';
 import Student from '../models/Student';
 
+import Queue from '../../lib/Queue';
+import HelpOrderAnswerMail from '../jobs/HelpOrderAnswerMail';
+
 class AdmHelpOrderController {
   async index(req, res) {
     const help_orders = await HelpOrder.findAll({ where: { answer: null } });
 
     return res.json(help_orders);
+  }
+
+  async update(req, res) {
+    const { help_order_id } = req.params;
+    const { answer } = req.body;
+
+    const help_order = await HelpOrder.findByPk(help_order_id);
+
+    const student = await Student.findByPk(help_order.student_id);
+
+    if (!help_order) {
+      return res.status(400).json({ error: 'Help Order not found.' });
+    }
+
+    if (!answer) {
+      return res
+        .status(400)
+        .json({ error: 'Please insert answer for help order.' });
+    }
+
+    await help_order.update({ answer, answer_at: new Date() });
+
+    await Queue.add(HelpOrderAnswerMail.key, {
+      student,
+      help_order,
+    });
+
+    return res.json(help_order);
   }
 }
 

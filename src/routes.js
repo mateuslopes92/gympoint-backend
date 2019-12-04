@@ -40,11 +40,16 @@ routes.delete('/registrations/:registration_id', RegistrationController.delete);
 
 // Adm Help Orders
 routes.get('/help-orders', AdmHelpOrderController.index);
+routes.put('/help-orders/:help_order_id/answer', AdmHelpOrderController.update);
 
 // Student Help Orders
 routes.post(
   '/students/:student_id/help-orders',
   StudentHelpOrderController.store
+);
+routes.get(
+  '/students/:student_id/help-orders',
+  StudentHelpOrderController.index
 );
 
 export default routes;
