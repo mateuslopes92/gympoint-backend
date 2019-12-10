@@ -1,10 +1,10 @@
 The second challenge of GoStack Bootcamp, GymPoint project for Gyms developed backend with NodeJS, Express, Sequelize and Postgres database.
 
-Backendo of a gym app, developed to apply the knowledge adquired in Go Stack Bootcamp.
+Backend of a gym app, developed to apply the knowledge adquired in Go Stack Bootcamp.
 
 <b>Technologies: NodeJS, Express, Nodemon, Docker, Postgresql, Sequelize(Migrations and Seeds), JWT(JsonWebToken), Middlewares and Yup(for validation).</b>
 
-Pego de: <a href="https://github.com/Rocketseat/bootcamp-gostack-desafio-03">RocketSeat Desafio 03</a>
+<a href="https://github.com/Rocketseat/bootcamp-gostack-desafio-03">RocketSeat Desafio 03</a>
 
 <h1 align="center">
   <img alt="Gympoint" title="Gympoint" src="https://github.com/Rocketseat/bootcamp-gostack-desafio-02/blob/master/.github/logo.png" width="200px" />
