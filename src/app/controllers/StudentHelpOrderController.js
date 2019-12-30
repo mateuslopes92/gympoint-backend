@@ -5,8 +5,13 @@ import Student from '../models/Student';
 class StudentHelpOrderController {
   async index(req, res) {
     const { student_id } = req.params;
+    const { page = 1 } = req.query;
 
-    const help_orders = await HelpOrder.findAll({ where: { student_id } });
+    const help_orders = await HelpOrder.findAll({
+      where: { student_id },
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
 
     return res.json(help_orders);
   }

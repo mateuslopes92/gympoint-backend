@@ -7,8 +7,12 @@ import Student from '../models/Student';
 class CheckinController {
   async index(req, res) {
     const { student_id } = req.params;
+    const { page = 1 } = req.query;
 
-    const student = await Student.findByPk(student_id);
+    const student = await Student.findByPk(student_id, {
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
 
     if (!student) {
       return res.json({ error: 'Student not found!' });

@@ -19,7 +19,7 @@ routes.use(authMiddleware);
 
 // Students
 routes.post('/students', StudentController.store);
-routes.get('/students', StudentController.index);
+routes.get('/students/', StudentController.index);
 routes.put('/students/:student_id', StudentController.update);
 
 // Checkins

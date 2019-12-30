@@ -7,7 +7,12 @@ import HelpOrderAnswerMail from '../jobs/HelpOrderAnswerMail';
 
 class AdmHelpOrderController {
   async index(req, res) {
-    const help_orders = await HelpOrder.findAll({ where: { answer: null } });
+    const { page = 1 } = req.query;
+    const help_orders = await HelpOrder.findAll({
+      where: { answer: null },
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
 
     return res.json(help_orders);
   }
