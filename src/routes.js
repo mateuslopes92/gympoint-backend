@@ -21,6 +21,7 @@ routes.use(authMiddleware);
 routes.post('/students', StudentController.store);
 routes.get('/students/', StudentController.index);
 routes.put('/students/:student_id', StudentController.update);
+routes.delete('/students/:student_id', StudentController.delete);
 
 // Checkins
 routes.post('/students/:student_id/checkins', CheckinController.store);

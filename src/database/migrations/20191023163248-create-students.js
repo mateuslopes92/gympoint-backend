@@ -20,7 +20,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      wheight: {
+      weight: {
         type: Sequelize.FLOAT,
         allowNull: false,
       },

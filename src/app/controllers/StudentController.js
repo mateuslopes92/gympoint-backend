@@ -7,7 +7,7 @@ class StudentController {
     const { q, page = 1 } = req.query;
 
     const students = await Student.findAll({
-      attributes: ['id', 'name', 'email', 'age', 'wheight', 'height'],
+      attributes: ['id', 'name', 'email', 'age', 'weight', 'height'],
       order: ['id'],
       limit: 20,
       offset: (page - 1) * 20,
@@ -30,7 +30,7 @@ class StudentController {
       age: Yup.number()
         .integer()
         .positive(),
-      wheight: Yup.number()
+      weight: Yup.number()
         .required()
         .positive(),
       height: Yup.number()
@@ -62,7 +62,7 @@ class StudentController {
       age: Yup.number()
         .integer()
         .positive(),
-      wheight: Yup.number().positive(),
+      weight: Yup.number().positive(),
       height: Yup.number().positive(),
     });
 
@@ -89,14 +89,27 @@ class StudentController {
         return res.status(400).json({ error: 'Student already exists' });
       }
     }
-    const { name, age, wheight, height } = await student.update(req.body);
+    const { name, age, weight, height } = await student.update(req.body);
     return res.json({
       name,
       email: student.email,
       age,
-      wheight,
+      weight,
       height,
     });
+  }
+
+  async delete(req, res) {
+    const { student_id } = req.params;
+    const student = await Student.findByPk(student_id);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student not found' });
+    }
+
+    await student.destroy();
+
+    return res.status(200).json({ ok: 'The Student has been deleted' });
   }
 }
 
