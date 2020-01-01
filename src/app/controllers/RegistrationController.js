@@ -1,5 +1,6 @@
 import { addMonths, parseISO, startOfDay, isBefore, endOfDay } from 'date-fns';
 import * as Yup from 'yup';
+import {isBefore}  from 'date-fns';
 import Plan from '../models/Plan';
 import Registration from '../models/Registration';
 import Student from '../models/Student';
@@ -146,9 +147,23 @@ class RegistrationController {
       return res.status(400).json({ error: 'Registration not found.' });
     }
 
-    await registration.destroy();
+    if (registration.canceled_at !== null) {
+      return res
+        .status(401)
+        .json({ error: 'This registration is already canceled' });
+    }
 
-    return res.json({ ok: true });
+    if (isBefore(registration.end_date, new Date())) {
+      return res
+        .status(401)
+        .json({ error: "You can't cancel an inactive registration" });
+    }
+
+    registration.canceled_at = new Date();
+
+    await registration.save();
+
+    return res.json(registration);
   }
 }
 

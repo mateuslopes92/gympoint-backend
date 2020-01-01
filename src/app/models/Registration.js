@@ -1,5 +1,6 @@
 import Sequelize, { Model } from 'sequelize';
 import { isAfter, isBefore } from 'date-fns';
+import { utcToZonedTime } from 'date-fns-tz';
 
 class Registration extends Model {
   static init(sequelize) {
@@ -10,15 +11,18 @@ class Registration extends Model {
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
         price: Sequelize.FLOAT,
+        canceled_at: Sequelize.DATE,
         active: {
           type: Sequelize.VIRTUAL(Sequelize.BOOLEAN, [
             'start_date',
             'end_date',
+            'canceled_at',
           ]),
           get() {
             return (
-              isBefore(this.get('start_date'), new Date()) &&
-              isAfter(this.get('end_date'), new Date())
+              isBefore(this.get('start_date'), utcToZonedTime(new Date())) &&
+              isAfter(this.get('end_date'), utcToZonedTime(new Date())) &&
+              this.get('canceled_at') === null
             );
           },
         },
