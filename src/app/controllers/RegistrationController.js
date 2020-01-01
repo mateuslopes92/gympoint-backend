@@ -10,6 +10,18 @@ class RegistrationController {
 
     const registrations = await Registration.findAll({
       attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Plan,
+          as: 'plan',
+          attributes: ['id', 'title', 'duration', 'price'],
+        },
+      ],
       limit: 20,
       offset: (page - 1) * 20,
     });
@@ -21,7 +33,7 @@ class RegistrationController {
     const schema = Yup.object().shape({
       student_id: Yup.number().required(),
       plan_id: Yup.number().required(),
-      start_date: Yup.number().required(),
+      start_date: Yup.date().required(),
     });
 
     if (!(await schema.isValid(req.body))) {
