@@ -57,12 +57,6 @@ class PlanController {
       return res.status(400).json({ error: 'Plan not found' });
     }
 
-    if (plan.title === req.body.title) {
-      return res
-        .status(400)
-        .json({ error: 'Plan with this title already exists' });
-    }
-
     const { title, duration, price } = await plan.update(req.body);
 
     return res.json({

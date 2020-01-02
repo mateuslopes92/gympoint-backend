@@ -1,6 +1,5 @@
 import { addMonths, parseISO, startOfDay, isBefore, endOfDay } from 'date-fns';
 import * as Yup from 'yup';
-import {isBefore}  from 'date-fns';
 import Plan from '../models/Plan';
 import Registration from '../models/Registration';
 import Student from '../models/Student';

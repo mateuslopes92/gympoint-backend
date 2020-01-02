@@ -10,6 +10,13 @@ class AdmHelpOrderController {
     const { page = 1 } = req.query;
     const help_orders = await HelpOrder.findAll({
       where: { answer: null },
+      include: [
+        {
+          model: Student,
+          as: 'student',
+          attributes: ['name'],
+        },
+      ],
       limit: 20,
       offset: (page - 1) * 20,
     });
