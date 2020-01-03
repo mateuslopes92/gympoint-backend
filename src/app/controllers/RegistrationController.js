@@ -83,7 +83,7 @@ class RegistrationController {
     const schema = Yup.object().shape({
       student_id: Yup.number(),
       plan_id: Yup.number(),
-      start_date: Yup.number(),
+      start_date: Yup.date(),
     });
 
     if (!(await schema.isValid(req.body))) {
