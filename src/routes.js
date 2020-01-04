@@ -19,6 +19,7 @@ routes.use(authMiddleware);
 
 // Students
 routes.post('/students', StudentController.store);
+routes.get('/students/:student_id', StudentController.read);
 routes.get('/students/', StudentController.index);
 routes.put('/students/:student_id', StudentController.update);
 routes.delete('/students/:student_id', StudentController.delete);
@@ -48,6 +49,7 @@ routes.post(
   '/students/:student_id/help-orders',
   StudentHelpOrderController.store
 );
+
 routes.get(
   '/students/:student_id/help-orders',
   StudentHelpOrderController.index
