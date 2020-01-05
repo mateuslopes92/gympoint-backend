@@ -25,7 +25,6 @@ class CheckinController {
 
   async store(req, res) {
     const { student_id } = req.params;
-    const { page = 1 } = req.query;
 
     const student = await Student.findByPk(student_id);
 
@@ -41,12 +40,10 @@ class CheckinController {
         created_at: {
           [Op.between]: [litmitDate, today],
         },
-        limit: 20,
-        offset: (page - 1) * 20,
       },
     });
 
-    if (checkins.length > 5) {
+    if (checkins.length >= 5) {
       return res
         .status(400)
         .json({ error: 'You can only do 5 checkins per week ' });

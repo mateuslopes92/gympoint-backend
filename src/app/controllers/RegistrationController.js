@@ -60,9 +60,9 @@ class RegistrationController {
 
     const { duration, price } = plan;
 
-    const startDate = startOfDay(parseISO(start_date));
+    const startDate = endOfDay(parseISO(start_date));
 
-    if (isBefore(endOfDay(startDate), new Date())) {
+    if (isBefore(startDate, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permited.' });
     }
 
@@ -148,13 +148,13 @@ class RegistrationController {
 
     if (registration.canceled_at !== null) {
       return res
-        .status(401)
+        .status(400)
         .json({ error: 'This registration is already canceled' });
     }
 
     if (isBefore(registration.end_date, new Date())) {
       return res
-        .status(401)
+        .status(400)
         .json({ error: "You can't cancel an inactive registration" });
     }
 
