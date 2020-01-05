@@ -13,13 +13,13 @@ import authMiddleware from './app/middlewares/auth';
 const routes = new Router();
 
 routes.post('/sessions', SessionController.store);
+routes.get('/students/:student_id', StudentController.read);
 
 // Daqui pra baixo somente pessoas logadas podem acessar as rotas
 routes.use(authMiddleware);
 
 // Students
 routes.post('/students', StudentController.store);
-routes.get('/students/:student_id', StudentController.read);
 routes.get('/students/', StudentController.index);
 routes.put('/students/:student_id', StudentController.update);
 routes.delete('/students/:student_id', StudentController.delete);

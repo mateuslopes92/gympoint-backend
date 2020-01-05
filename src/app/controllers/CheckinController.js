@@ -15,7 +15,7 @@ class CheckinController {
     });
 
     if (!student) {
-      return res.json({ error: 'Student not found!' });
+      return res.status(400).json({ error: 'Student not found!' });
     }
 
     const checkins = await Checkin.findAll({ where: { student_id } });
@@ -25,11 +25,12 @@ class CheckinController {
 
   async store(req, res) {
     const { student_id } = req.params;
+    const { page = 1 } = req.query;
 
     const student = await Student.findByPk(student_id);
 
     if (!student) {
-      return res.json({ error: 'Student not found!' });
+      return res.status(404).json({ error: 'Student not found!' });
     }
 
     const litmitDate = subDays(new Date(), 7);
@@ -40,11 +41,15 @@ class CheckinController {
         created_at: {
           [Op.between]: [litmitDate, today],
         },
+        limit: 20,
+        offset: (page - 1) * 20,
       },
     });
 
     if (checkins.length > 5) {
-      return res.json({ error: 'You can only do 5 checkins per week ' });
+      return res
+        .status(400)
+        .json({ error: 'You can only do 5 checkins per week ' });
     }
 
     const checkin = await Checkin.create({ student_id });

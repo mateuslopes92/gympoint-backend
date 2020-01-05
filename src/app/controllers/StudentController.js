@@ -1,6 +1,8 @@
 import * as Yup from 'yup';
+import jwt from 'jsonwebtoken';
 import { Op } from 'sequelize';
 import Student from '../models/Student';
+import authConfig from '../../config/auth';
 
 class StudentController {
   async index(req, res) {
@@ -28,7 +30,12 @@ class StudentController {
       where: { id: student_id },
     });
 
-    return res.json(student);
+    return res.json({
+      student,
+      token: jwt.sign({ student_id }, authConfig.secret, {
+        expiresIn: authConfig.expiresIn,
+      }),
+    });
   }
 
   async store(req, res) {
